@@ -28,12 +28,10 @@
             <tbody>
               <tr v-for="service in services">
                 <td><span class="trigger">{{ service.name }}</span>
-                  <div class="hiddenlocal">
+                  <div class="hiddenlocal" v-if="service.messages.length > 0">
                     <div v-for="message in service.messages">
-                      <i><small>{{ message }}</small></i>
-                      <br>
+                      <p class="messages"><strong>{{ message }}</strong></p>
                     </div>
-
                   </div>
                 </td>
                 <td><span>{{ service.description }}</span></td>
