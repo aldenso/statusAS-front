@@ -3,18 +3,26 @@
   <head>
     <meta charset="utf-8">
     <title>Status</title>
-  </head>
-  <body>
     <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">-->
     <link rel="stylesheet" href="/resources/css/bootstrap334.min.css" media="screen" title="no title" charset="utf-8">
     <link rel="stylesheet" href="/resources/css/mytheme.css" charset="utf-8">
     <!--<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">-->
-    <div class="container" id="services">
+  </head>
+  <body>
+
       <div class="header">
         <h1>{{{.Title}}}</h1>
         <h2>Services</h2>
-        <button v-on:click="loadServices" type="button" class="btn btn-info">refresh</button>
+
       </div>
+      <div id="date" class="center">
+        <h4>{{ date }}</h4>
+      </div>
+
+      <div class="container" id="services">
+        <div class="center">
+          <button v-on:click="loadServices" type="button" class="btn btn-info">refresh</button>
+        </div>
         <div class="col-md-12">
           <table v-if="services" class="table">
             <thead >

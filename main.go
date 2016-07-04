@@ -3,7 +3,7 @@
 * @Date:   2016-07-03T21:02:19-04:30
 * @Email:  aldenso@gmail.com
 * @Last modified by:   Aldo Sotolongo
-* @Last modified time: 2016-07-03T21:23:59-04:30
+* @Last modified time: 2016-07-04T12:27:12-04:30
  */
 package main
 
@@ -45,5 +45,5 @@ func main() {
 	r.PathPrefix("/resources/").Handler(http.StripPrefix("/resources/", http.FileServer(http.Dir("./resources/"))))
 	r.HandleFunc("/dashboard", Dashboard).Methods("GET")
 	loggedrouter := handlers.LoggingHandler(os.Stdout, r)
-	http.ListenAndServe("0.0.0.0:9000", loggedrouter)
+	http.ListenAndServe("0.0.0.0:9000", handlers.CompressHandler(loggedrouter))
 }
