@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Status</title>
+  </head>
+  <body>
+    <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">-->
+    <link rel="stylesheet" href="/resources/css/bootstrap334.min.css" media="screen" title="no title" charset="utf-8">
+    <link rel="stylesheet" href="/resources/css/mytheme.css" charset="utf-8">
+    <!--<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">-->
+    <div class="container" id="services">
+      <div class="header">
+        <h1>{{{.Title}}}</h1>
+        <h2>Services</h2>
+        <button v-on:click="loadServices" type="button" class="btn btn-info">refresh</button>
+      </div>
+        <div class="col-md-12">
+          <table v-if="services" class="table">
+            <thead >
+              <tr class="center">
+                <th>Name</th>
+                <th>Description</th>
+                <th>Link</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="service in services">
+                <td><span class="trigger">{{ service.name }}</span>
+                  <div class="hiddenlocal">
+                    <div v-for="message in service.messages">
+                      <i><small>{{ message }}</small></i>
+                      <br>
+                    </div>
+
+                  </div>
+                </td>
+                <td><span>{{ service.description }}</span></td>
+                <td><span><a href="{{ service.link }}">{{ service.link }}</a></span></td>
+                <td v-if="service.status == '0'" class="alert alert-success"><span>Operational</span></td>
+                <td v-if="service.status == '1'" class="alert alert-danger"><span>Not Operational</span></td>
+              </tr>
+            </tbody>
+          </table>
+        <div class="alert alert-danger" v-if="error">
+          <p>There was an error retrieving the data</p>
+        </div>
+        </div>
+      </div>
+
+<script src="/resources/js/vue.js"></script>
+<script src="/resources/js/vue-resource.js" charset="utf-8"></script>
+<script src="/resources/js/app.js" charset="utf-8"></script>
+  </body>
+</html>
