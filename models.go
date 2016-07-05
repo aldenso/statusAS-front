@@ -1,0 +1,126 @@
+package main
+
+import (
+	"fmt"
+	"os"
+	"strconv"
+	"strings"
+)
+
+type page struct {
+	Title string
+}
+
+// Tomlconfig struct to read toml file components.
+type Tomlconfig struct {
+	FrontServer FrontServerinfo
+}
+
+// FrontServerinfo struct to configure statusAS-front
+type FrontServerinfo struct {
+	FrontServerName string
+	FrontServerPort int
+	APIServerName   string
+	APIServerPort   int
+}
+
+// CreateTemplate function to create a base config.toml file
+func CreateTemplate() {
+	template := `# Example of config Configuration
+[frontserver]
+frontservername = "server2.mydom.local"
+frontserverport = 9000
+apiservername = "server1.mydom.local"
+apiserverport = 8080
+`
+	tomlfile := "config.toml"
+	if _, err := os.Stat(tomlfile); err != nil {
+		if os.IsNotExist(err) {
+			file, err := os.Create(tomlfile)
+			if err != nil {
+				fmt.Println("Error creating config.toml file", err)
+				os.Exit(1)
+			}
+			defer file.Close()
+			if _, err := file.Write([]byte(template)); err != nil {
+				fmt.Printf("Can't write message\n%v\n", err)
+				os.Exit(1)
+			}
+		}
+	} else {
+		fmt.Println("config.toml already exist in directory.")
+		os.Exit(1)
+	}
+	fmt.Println("config.toml created.")
+	os.Exit(0)
+}
+
+// CreateAppjs create app.js with config from tomlfile
+func CreateAppjs() {
+	appjs := `var apiurlservices = "http://APIURLSERVICES/api/v1/services"
+
+new Vue({
+  el: '#services',
+  data: {
+    services: [],
+    error: false,
+  },
+  methods: {
+    loadServices: function(){
+      this.$http.get(apiurlservices).then(function(response){
+        this.$set('services', response.json())
+      }, function(response) {
+        this.$set('error', true)
+      });
+    }
+  },
+  ready: function(){
+    this.loadServices();
+    setInterval(function () {
+      this.loadServices();
+    }.bind(this), 15000);
+  }
+});
+
+new Vue({
+  el: "#date",
+  data: {
+    date: ""
+  },
+  methods: {
+  showtime: function() {
+    var date = new Date();
+    var time = date.toTimeString();
+    var dd = date.getDate();
+    var mm = date.getMonth()+1;//january is month 0
+    var yy = date.getFullYear();
+    this.date = dd+'/'+mm+'/'+yy + ' ' +time;
+    }
+  },
+  ready: function(){
+    this.showtime();
+
+    setInterval(function () {
+    this.showtime();
+    }.bind(this), 30000);
+  }
+});
+`
+	var newappjs string
+	if apiserverport != 0 {
+		newappjs = strings.Replace(appjs, "APIURLSERVICES", apiservername+":"+strconv.Itoa(apiserverport), 1)
+	} else {
+		newappjs = strings.Replace(appjs, "APIURLSERVICES", apiservername, 1)
+	}
+	appjsfile := "resources/js/app.js"
+	file, err := os.Create(appjsfile)
+	if err != nil {
+		fmt.Println("Error creating resources/js/app.js file", err)
+		os.Exit(1)
+	}
+	defer file.Close()
+	if _, err := file.Write([]byte(newappjs)); err != nil {
+		fmt.Printf("Can't write\n%v\n", err)
+		os.Exit(1)
+	}
+}

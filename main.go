@@ -3,30 +3,47 @@
 * @Date:   2016-07-03T21:02:19-04:30
 * @Email:  aldenso@gmail.com
 * @Last modified by:   Aldo Sotolongo
-* @Last modified time: 2016-07-04T12:27:12-04:30
+* @Last modified time: 2016-07-05T18:15:35-04:30
  */
 package main
 
 import (
+	"flag"
+	"fmt"
 	"html/template"
 	"net/http"
 	"os"
+	"strconv"
 
+	"github.com/BurntSushi/toml"
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 )
 
-type page struct {
-	Title string
-}
-
-var templates *template.Template
+var (
+	templates       *template.Template
+	tomlfile        = "config.toml"
+	createtemplate  bool
+	apiservername   string
+	apiserverport   int
+	frontservername string
+	frontserverport int
+)
 
 func init() {
 	pageFile := "templates/default/app.html"
 	templates = template.New("app.html")
 	templates.Delims("{{{", "}}}")
 	templates.ParseFiles(pageFile)
+	flag.BoolVar(&createtemplate, "createtemplate", false, "Create an example config.toml file")
+}
+
+func readTomlFile(tomlfile string) (*Tomlconfig, error) {
+	var config *Tomlconfig
+	if _, err := toml.DecodeFile(tomlfile, &config); err != nil {
+		return nil, err
+	}
+	return config, nil
 }
 
 // Dashboard get services status
@@ -40,10 +57,25 @@ func Dashboard(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
+	flag.Parse()
+	if createtemplate {
+		CreateTemplate()
+	}
+	config, err := readTomlFile(tomlfile)
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+	frontservername = config.FrontServer.FrontServerName
+	frontserverport = config.FrontServer.FrontServerPort
+	apiservername = config.FrontServer.APIServerName
+	apiserverport = config.FrontServer.APIServerPort
+	CreateAppjs()
+
 	r := mux.NewRouter()
 	//serve static files
 	r.PathPrefix("/resources/").Handler(http.StripPrefix("/resources/", http.FileServer(http.Dir("./resources/"))))
 	r.HandleFunc("/dashboard", Dashboard).Methods("GET")
 	loggedrouter := handlers.LoggingHandler(os.Stdout, r)
-	http.ListenAndServe("0.0.0.0:9000", handlers.CompressHandler(loggedrouter))
+	http.ListenAndServe(frontservername+":"+strconv.Itoa(frontserverport), handlers.CompressHandler(loggedrouter))
 }

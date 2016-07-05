@@ -1,0 +1,6 @@
+# Example of config Configuration
+[frontserver]
+frontservername = "server2.mydom.local"
+frontserverport = 9000
+apiservername = "server1.mydom.local"
+apiserverport = 8080
