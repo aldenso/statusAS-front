@@ -14,6 +14,7 @@ frontservername = "server2.mydom.local"
 frontserverport = 9000
 apiservername = "server1.mydom.local"
 apiserverport = 8080
+apitls = true
 ```
 
 Then build, run and check the url.

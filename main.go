@@ -3,7 +3,7 @@
 * @Date:   2016-07-03T21:02:19-04:30
 * @Email:  aldenso@gmail.com
 * @Last modified by:   Aldo Sotolongo
-* @Last modified time: 2016-07-05T18:15:35-04:30
+* @Last modified time: 2016-07-06T15:44:00-04:30
  */
 package main
 
@@ -26,6 +26,7 @@ var (
 	createtemplate  bool
 	apiservername   string
 	apiserverport   int
+	apitls          bool
 	frontservername string
 	frontserverport int
 )
@@ -70,6 +71,7 @@ func main() {
 	frontserverport = config.FrontServer.FrontServerPort
 	apiservername = config.FrontServer.APIServerName
 	apiserverport = config.FrontServer.APIServerPort
+	apitls = config.FrontServer.APItls
 	CreateAppjs()
 
 	r := mux.NewRouter()

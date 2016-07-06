@@ -22,6 +22,7 @@ type FrontServerinfo struct {
 	FrontServerPort int
 	APIServerName   string
 	APIServerPort   int
+	APItls          bool
 }
 
 // CreateTemplate function to create a base config.toml file
@@ -32,6 +33,7 @@ frontservername = "server2.mydom.local"
 frontserverport = 9000
 apiservername = "server1.mydom.local"
 apiserverport = 8080
+apitls = true
 `
 	tomlfile := "config.toml"
 	if _, err := os.Stat(tomlfile); err != nil {
@@ -57,7 +59,7 @@ apiserverport = 8080
 
 // CreateAppjs create app.js with config from tomlfile
 func CreateAppjs() {
-	appjs := `var apiurlservices = "http://APIURLSERVICES/api/v1/services"
+	appjs := `var apiurlservices = "APIURLSERVICES/api/v1/services"
 
 new Vue({
   el: '#services',
@@ -111,9 +113,17 @@ new Vue({
 `
 	var newappjs string
 	if apiserverport != 0 {
-		newappjs = strings.Replace(appjs, "APIURLSERVICES", apiservername+":"+strconv.Itoa(apiserverport), 1)
+		if apitls {
+			newappjs = strings.Replace(appjs, "APIURLSERVICES", "https://"+apiservername+":"+strconv.Itoa(apiserverport), 1)
+		} else {
+			newappjs = strings.Replace(appjs, "APIURLSERVICES", "http://"+apiservername+":"+strconv.Itoa(apiserverport), 1)
+		}
 	} else {
-		newappjs = strings.Replace(appjs, "APIURLSERVICES", apiservername, 1)
+		if apitls {
+			newappjs = strings.Replace(appjs, "APIURLSERVICES", "https://"+apiservername, 1)
+		} else {
+			newappjs = strings.Replace(appjs, "APIURLSERVICES", "http://"+apiservername, 1)
+		}
 	}
 	appjsfile := "resources/js/app.js"
 	file, err := os.Create(appjsfile)

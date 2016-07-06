@@ -1,4 +1,4 @@
-var apiurlservices = "http://server1.mydom.local:8080/api/v1/services"
+var apiurlservices = "https://server1.mydom.local:8080/api/v1/services"
 
 new Vue({
   el: '#services',
