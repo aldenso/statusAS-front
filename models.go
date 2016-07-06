@@ -72,7 +72,10 @@ new Vue({
       }, function(response) {
         this.$set('error', true)
       });
-    }
+    },
+		isEven: function(n){
+			return n % 2 == 0;
+		}
   },
   ready: function(){
     this.loadServices();

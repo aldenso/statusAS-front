@@ -34,7 +34,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="service in services">
+              <tr v-for="service in services | orderBy 'group_id'" v-bind:class="{ 'even': isEven(service.group_id) }">
                 <td><span class="trigger">{{ service.name }}</span>
                   <div class="hiddenlocal" v-if="service.messages.length > 0">
                     <div v-for="message in service.messages">
