@@ -23,6 +23,14 @@
         <div class="center">
           <button v-on:click="loadServices" type="button" class="btn btn-info">refresh</button>
         </div>
+        <br>
+        <div class="center count">
+          <p>
+            Operational: <strong>{{ operational }}</strong> |
+             Degraded: <strong>{{ degraded }}</strong> |
+             Not Operational: <strong>{{ notOperational }}</strong>
+           </p>
+        </div>
         <div class="col-md-12">
           <table v-if="services" class="table">
             <thead >

@@ -1,10 +1,13 @@
 var apiurlservices = "https://server1.mydom.local:8080/api/v1/services"
 
-new Vue({
+var serv = new Vue({
   el: '#services',
   data: {
     services: [],
     error: false,
+    operational: 0,
+    degraded: 0,
+    notOperational: 0
   },
   methods: {
     loadServices: function(){
@@ -12,6 +15,19 @@ new Vue({
         this.$set('services', response.json())
       }, function(response) {
         this.$set('error', true)
+      }).then( function() {
+      var operationalCount = 0;
+      var degradedCount = 0;
+      var notOperationalCount = 0;
+      for (var i = 0; i < this.services.length; i++){
+      var current = this.services[i];
+      if (current.status == 0) operationalCount++
+      if (current.status == 1) degradedCount++
+      if (current.status == 2) notOperationalCount++
+      }
+      this.$set('operational', operationalCount);
+      this.$set('degraded', degradedCount);
+      this.$set('notOperational', notOperationalCount);
       });
     },
 		isEven: function(n){
@@ -25,6 +41,7 @@ new Vue({
     }.bind(this), 15000);
   }
 });
+
 
 new Vue({
   el: "#date",

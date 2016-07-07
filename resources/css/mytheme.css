@@ -3,7 +3,7 @@
 * @Date:   2016-07-03T21:01:59-04:30
 * @Email:  aldenso@gmail.com
 * @Last modified by:   Aldo Sotolongo
-* @Last modified time: 2016-07-05T23:28:03-04:30
+* @Last modified time: 2016-07-07T16:14:12-04:30
 */
 
 .header {
@@ -43,6 +43,10 @@ body {
 
 .center {
   text-align: center;
+}
+
+.count {
+  font-size: 16px;
 }
 
 .even {
