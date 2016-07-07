@@ -45,7 +45,8 @@
                 <td><span>{{ service.description }}</span></td>
                 <td><span><a href="{{ service.link }}">{{ service.link }}</a></span></td>
                 <td v-if="service.status == '0'" class="alert alert-success"><span>Operational</span></td>
-                <td v-if="service.status == '1'" class="alert alert-danger"><span>Not Operational</span></td>
+                <td v-if="service.status == '1'" class="alert alert-warning"><span>Degraded</span></td>
+                <td v-if="service.status == '2'" class="alert alert-danger"><span>Not Operational</span></td>
               </tr>
             </tbody>
           </table>
