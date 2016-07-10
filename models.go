@@ -66,6 +66,7 @@ var serv = new Vue({
   data: {
     services: [],
     oldservices: [],
+    compare: [],
     error: false,
     operational: 0,
     degraded: 0,
@@ -75,11 +76,23 @@ var serv = new Vue({
   methods: {
     loadServices: function(){
       this.$http.get(apiurlservices).then(function(response){
-        this.$set('services', response.json())
-        if (this.oldservices.length < 1) this.$set('oldservices', response.json());
-        if (JSON.stringify(this.services) !== JSON.stringify(this.oldservices)) this.$set('show', true);
-        if (JSON.stringify(this.services) === JSON.stringify(this.oldservices)) this.$set('show', false);
-        this.$set('oldservices', this.services)
+        /*this.$set('services', response.json())*/
+        this.$set('compare', response.json())
+        if (this.oldservices.length < 1) {
+          this.$set('oldservices', response.json());
+          this.$set('services', response.json());
+          return
+				}
+        if (JSON.stringify(this.compare) !== JSON.stringify(this.oldservices)) {
+          this.$set('show', true);
+          this.$set('services', response.json())
+          this.$set('oldservices', this.services)
+          return
+				}
+        if (JSON.stringify(this.compare) === JSON.stringify(this.oldservices)) {
+          this.$set('show', false);
+          return
+				}
       }, function(response) {
         this.$set('error', true)
       }).then( function() {
