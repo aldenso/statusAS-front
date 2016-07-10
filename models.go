@@ -71,7 +71,8 @@ var serv = new Vue({
     operational: 0,
     degraded: 0,
     notOperational: 0,
-    show: false
+    show: false,
+    query: ''
   },
   methods: {
     loadServices: function(){

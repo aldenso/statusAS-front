@@ -24,6 +24,13 @@
           <button v-on:click="loadServices" type="button" class="btn btn-info">refresh</button>
         </div>
         <br>
+        <div class="input-group input-group">
+          <span class="input-group-addon" id="sizing-addon1">Search</span>
+          <input type="text" class="form-control" placeholder="Name, Description or Link"
+          aria-describedby="sizing-addon1" v-model="query" >
+          <br>
+        </div>
+
         <div class="center count">
           <p>
             Operational: <strong>{{ operational }}</strong> |
@@ -47,7 +54,9 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="service in services | orderBy 'group_id'" v-bind:class="{ 'even': isEven(service.group_id) }">
+              <tr v-for="service in services | orderBy 'group_id' | filterBy query"
+              transition="staggered" stagger="100"
+               v-bind:class="{ 'even': isEven(service.group_id) }">
                 <td><span class="trigger">{{ service.name }}</span>
                   <div class="hiddenlocal" v-if="service.messages.length > 0">
                     <div v-for="message in service.messages">

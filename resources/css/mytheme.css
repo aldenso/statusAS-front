@@ -3,7 +3,7 @@
 * @Date:   2016-07-03T21:01:59-04:30
 * @Email:  aldenso@gmail.com
 * @Last modified by:   Aldo Sotolongo
-* @Last modified time: 2016-07-09T22:49:52-04:30
+* @Last modified time: 2016-07-10T17:47:59-04:30
 */
 
 .header {
@@ -69,4 +69,15 @@ body {
   height: 0;
   padding: 0 10px;
   opacity: 0;
+}
+
+.staggered-transition {
+    transition: all .5s ease;
+    overflow: hidden;
+    margin: 0;
+    height: 20px;
+}
+.staggered-enter, .staggered-leave {
+    opacity: 0;
+    height: 0;
 }
