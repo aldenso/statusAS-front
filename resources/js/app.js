@@ -4,15 +4,21 @@ var serv = new Vue({
   el: '#services',
   data: {
     services: [],
+    oldservices: [],
     error: false,
     operational: 0,
     degraded: 0,
-    notOperational: 0
+    notOperational: 0,
+    show: false
   },
   methods: {
     loadServices: function(){
       this.$http.get(apiurlservices).then(function(response){
         this.$set('services', response.json())
+        if (this.oldservices.length < 1) this.$set('oldservices', response.json());
+        if (JSON.stringify(this.services) !== JSON.stringify(this.oldservices)) this.$set('show', true);
+        if (JSON.stringify(this.services) === JSON.stringify(this.oldservices)) this.$set('show', false);
+        this.$set('oldservices', this.services)
       }, function(response) {
         this.$set('error', true)
       }).then( function() {

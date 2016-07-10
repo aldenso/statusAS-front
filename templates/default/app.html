@@ -31,6 +31,11 @@
              Not Operational: <strong>{{ notOperational }}</strong>
            </p>
         </div>
+
+        <div v-if="show" transition="expand"
+        class="alert alert-info" role="alert">New updates in services
+        </div>
+
         <div class="col-md-12">
           <table v-if="services" class="table">
             <thead >
